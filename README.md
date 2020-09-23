@@ -1,3 +1,3 @@
 # spring-security-jwt
-之前照着网上照抄的一套security+jwt令牌
-经过测试还不错,就是有部分原理没搞懂
+
+SecurityConfig中的configure没搞明白,各种搜索拼拼凑凑写出来的,可能有BUG,正在重新学习security,后续可能会改改

@@ -48,7 +48,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String userName = TestJwtUtils.getUsername(token);
         String role = TestJwtUtils.getUserRole(token);
         if (userName != null){
-            //todo 未存入数据库中
             return new UsernamePasswordAuthenticationToken(userName, null,
                     Collections.singleton(new SimpleGrantedAuthority(role)));
         }

@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,7 +28,6 @@ import java.util.Collection;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
-
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         super.setFilterProcessesUrl("/auth/login");
@@ -38,7 +38,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         // 从输入流中获取到登录的信息
         try {
-            CheckUserEntity loginUser = new ObjectMapper().readValue(request.getInputStream(), CheckUserEntity.class);
+            ServletInputStream inputStream = request.getInputStream();
+            CheckUserEntity loginUser = new ObjectMapper().readValue(inputStream, CheckUserEntity.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword())
             );

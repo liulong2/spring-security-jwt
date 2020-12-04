@@ -65,10 +65,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/tasks/**")
                 //authenticated  需要认证
                 .authenticated()
+                .antMatchers("/auth/*").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/tasks/**")
                 .hasRole("ADMIN")
                 // 其他都放行了
-                .anyRequest().permitAll()
+//                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))

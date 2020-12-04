@@ -23,7 +23,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("date_user")
+@TableName("data_user")
 public class CheckUserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

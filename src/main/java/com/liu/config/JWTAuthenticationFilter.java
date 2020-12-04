@@ -1,5 +1,7 @@
 package com.liu.config;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liu.entity.CheckUserEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +17,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 
 /**
@@ -38,12 +42,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         // 从输入流中获取到登录的信息
         try {
-            ServletInputStream inputStream = request.getInputStream();
-            CheckUserEntity loginUser = new ObjectMapper().readValue(inputStream, CheckUserEntity.class);
+
+            CheckUserEntity loginUser= JSON.parseObject(JSON.toJSONString(request.getParameterMap()), CheckUserEntity.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword())
             );
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

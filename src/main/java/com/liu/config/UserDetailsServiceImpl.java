@@ -49,27 +49,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         CheckUserEntity checkUserEntity = dateUserDAO.selectOne(new LambdaQueryWrapper<CheckUserEntity>()
                 .eq(CheckUserEntity::getUserName, username));
-        if (Objects.nonNull(checkUserEntity)) {
+        if (Objects.isNull(checkUserEntity)) {
+            return null;
+        }
 
-            if (StringUtil.isNullOrEmpty(checkUserEntity.getRole())) {
-                CheckRoleEntity checkRoleEntity = roleDAO.selectById(checkUserEntity.getRole());
-                // 权限集合
-                List<GrantedAuthority> authList = new ArrayList<>();
+        if (StringUtil.isNullOrEmpty(checkUserEntity.getRole())) {
+            CheckRoleEntity checkRoleEntity = roleDAO.selectById(checkUserEntity.getRole());
+            // 权限集合
+            List<GrantedAuthority> authList = new ArrayList<>();
 
-                // 具体具有什么的权限
-                authList.add(new SimpleGrantedAuthority("ROLE_" + checkRoleEntity.getName()));
-                //1 判断用户名是否为null 如果为null 直接返回null
+            // 具体具有什么的权限
+            authList.add(new SimpleGrantedAuthority("ROLE_" + checkRoleEntity.getName()));
+            //1 判断用户名是否为null 如果为null 直接返回null
 
-                //3 如果用户查不到 返回null
+            //3 如果用户查不到 返回null
 
-                //4 如果用户对象查到了 判断用户审核 是否通过 如果未通过返回null
-                //5 返回user 对象 将用户名 密码 返回权限集合
-                return new User(checkUserEntity.getUserName(), checkUserEntity.getPassword(), authList);
-            }
-
-
+            //4 如果用户对象查到了 判断用户审核 是否通过 如果未通过返回null
+            //5 返回user 对象 将用户名 密码 返回权限集合
+            //6 框架帮助比对用户名和密码是否匹配
+            return new User(checkUserEntity.getUserName(), checkUserEntity.getPassword(), authList);
         }
         return null;
-//6 框架帮助比对用户名和密码是否匹配
     }
 }

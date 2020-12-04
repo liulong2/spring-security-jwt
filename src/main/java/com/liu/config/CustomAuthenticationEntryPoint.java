@@ -19,6 +19,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.setContentType("text/javascript;charset=utf-8");
+        // TODO 2020-12-14 19:16 需要定义状态码进行返回值判断
         httpServletResponse.getWriter().print(JSONObject.toJSONString("您没有权限"));
 
     }

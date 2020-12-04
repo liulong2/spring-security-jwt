@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liu.entity.CheckUserEntity;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,19 +38,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         super.setFilterProcessesUrl("/auth/login");
     }
 
+    @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         // 从输入流中获取到登录的信息
         try {
 
+            //通过过滤器获得相应的数据,可以在此处理相应的逻辑(暂时预留出来的)
             CheckUserEntity loginUser= JSON.parseObject(JSON.toJSONString(request.getParameterMap()), CheckUserEntity.class);
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword())
-            );
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword());
+            return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new Exception("用户信息异常");
         }
     }
     // 成功验证后调用的方法 reason authentication failed
